@@ -4,9 +4,16 @@ import { CommonPropsType, PreparedNodeType } from "types/Tree"
 
 interface NodeProps extends CommonPropsType {
   node: PreparedNodeType
+  isSelectedChilds: boolean
 }
 
-const Node = ({ node, rootSvg, clickHandler, activeNodes }: NodeProps) => {
+const Node = ({
+  node,
+  rootSvg,
+  clickHandler,
+  selectNode,
+  isSelectedChilds,
+}: NodeProps) => {
   const renderLine = useCallback(
     (n: PreparedNodeType) =>
       n.parent_id &&
@@ -16,18 +23,20 @@ const Node = ({ node, rootSvg, clickHandler, activeNodes }: NodeProps) => {
           y1={n.y}
           x2={n.parent_xy.x}
           y2={n.parent_xy.y}
-          stroke={activeNodes.includes(n.parent_id) ? "aqua" : "black"}
+          stroke={
+            selectNode === n.parent_id || isSelectedChilds ? "aqua" : "black"
+          }
         />
       ),
-    [activeNodes]
+    [isSelectedChilds, selectNode]
   )
 
   return (
     <>
       {rootSvg.current && createPortal(renderLine(node), rootSvg.current)}
-      <g onClick={() => clickHandler(node)}>
+      <g onClick={() => clickHandler(node.id)}>
         <circle
-          stroke={activeNodes.includes(node.id) ? "lime" : "gray"}
+          stroke={selectNode === node.id || isSelectedChilds ? "lime" : "gray"}
           cx={node.x}
           cy={node.y}
           r="5"

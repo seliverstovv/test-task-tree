@@ -4,13 +4,15 @@ import Node from "./Node"
 
 interface TreeProps extends CommonPropsType {
   preparedTree: PreparedTreeType
+  isSelectedChilds: boolean
 }
 
 const Recursive = ({
   preparedTree,
   rootSvg,
   clickHandler,
-  activeNodes,
+  selectNode,
+  isSelectedChilds,
 }: TreeProps) => {
   return (
     <>
@@ -19,15 +21,19 @@ const Recursive = ({
           <Node
             node={node}
             rootSvg={rootSvg}
-            activeNodes={activeNodes}
+            selectNode={selectNode}
             clickHandler={clickHandler}
+            isSelectedChilds={isSelectedChilds}
           />
           {node.childNodes.length !== 0 && (
             <Recursive
               preparedTree={node.childNodes}
               rootSvg={rootSvg}
-              activeNodes={activeNodes}
+              selectNode={selectNode}
               clickHandler={clickHandler}
+              isSelectedChilds={
+                selectNode === node.id || selectNode === node.parent_id
+              }
             />
           )}
         </Fragment>

@@ -21,10 +21,10 @@ export type PreparedTreeType = PreparedNodeType[]
 
 export type SVGRefType = RefObject<SVGSVGElement>
 
-export type ActiveNodeType = number[]
+export type ActiveNodeType = number | false
 
 export interface CommonPropsType {
   rootSvg: SVGRefType
-  clickHandler: (node: PreparedNodeType) => void
-  activeNodes: ActiveNodeType
+  clickHandler: (nodeId: number) => void
+  selectNode: ActiveNodeType
 }

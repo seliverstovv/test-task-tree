@@ -7,7 +7,7 @@ import {
 } from "types/Tree"
 import createDataTree from "utils/createDataTree"
 import getChildIds from "utils/getChilds"
-import Recursive from "./Recusive"
+import Recursive from "./Recursive"
 
 type TreeProps = { tree: TreeType }
 

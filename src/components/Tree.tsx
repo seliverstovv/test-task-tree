@@ -17,10 +17,17 @@ const Tree = ({ tree }: TreeProps) => {
   const [targetRef, setTargetRef] = useState<SVGRefType | null>(null)
   const rootSvg = useRef<SVGSVGElement>(null)
 
-  const setActiveNodeHandler = useCallback((node: PreparedNodeType) => {
-    const ids = getChildIds(node)
-    setActiveNodes([node.id, ...ids])
-  }, [])
+  const setActiveNodeHandler = useCallback(
+    (node: PreparedNodeType) => {
+      if (node.id === activeNodes[0]) {
+        setActiveNodes([])
+        return
+      }
+      const ids = getChildIds(node)
+      setActiveNodes([node.id, ...ids])
+    },
+    [activeNodes]
+  )
 
   useLayoutEffect(() => {
     setTargetRef(rootSvg)

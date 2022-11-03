@@ -36,7 +36,7 @@ const Tree = ({ tree }: TreeProps) => {
   return (
     <div style={{ width: "500px", height: "500px", fontSize: "10px" }}>
       <svg viewBox="0 -10 500 500" xmlns="http://www.w3.org/2000/svg">
-        <g ref={rootSvg} width="500" height="500" />
+        <g className="svgLinesGroup" ref={rootSvg} width="500" height="500" />
         {targetRef && (
           <Recursive
             preparedTree={preparedTree}

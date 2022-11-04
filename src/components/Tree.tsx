@@ -21,23 +21,40 @@ const Tree = ({ tree }: TreeProps) => {
 
   const setActiveNodeHandler = useCallback(
     (node: PreparedNodeType) => {
-      setActiveLeaf(null)
+      const setSelectChilds = () => {
+        const ids = getChildIds(node)
+        setActiveNodes([node.id, ...ids])
+      }
+
+      if (activeLeaf) {
+        setActiveLeaf(null)
+        setSelectChilds()
+        return
+      }
 
       if (node.id === activeNodes[0]) {
         setActiveNodes([])
         return
       }
 
-      const ids = getChildIds(node)
-      setActiveNodes([node.id, ...ids])
+      setSelectChilds()
     },
-    [activeNodes]
+    [activeLeaf, activeNodes]
   )
 
-  const setActiveLeafHandler = useCallback((id: number, path: PathType) => {
-    setActiveLeaf(id)
-    setActiveNodes(path)
-  }, [])
+  const setActiveLeafHandler = useCallback(
+    (id: number, path: PathType) => {
+      if (id === activeLeaf) {
+        setActiveLeaf(null)
+        setActiveNodes([])
+        return
+      }
+
+      setActiveLeaf(id)
+      setActiveNodes(path)
+    },
+    [activeLeaf]
+  )
 
   useLayoutEffect(() => {
     setTargetRef(rootSvg)

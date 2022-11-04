@@ -17,10 +17,22 @@ const Node = ({
 }: NodeProps) => {
   const isLeaf = node.childNodes.length === 0
 
+  const getActiveNodeColor = () => {
+    switch (true) {
+      case activeLeaf === node.id:
+        return "tomato"
+      case activeNodes.includes(node.id):
+        return "lime"
+      default:
+        return "gray"
+    }
+  }
+
   const renderLine = useCallback(
     (n: PreparedNodeType) => {
       const isSelectPath = activeLeaf
       const targetId = isSelectPath ? n.id : n.parent_id || -1
+
       return (
         n.parent_id &&
         n.parent_xy && (
@@ -46,7 +58,7 @@ const Node = ({
         }
       >
         <circle
-          stroke={activeNodes.includes(node.id) ? "lime" : "gray"}
+          stroke={getActiveNodeColor()}
           cx={node.x}
           cy={node.y}
           r="5"

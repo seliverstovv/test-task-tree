@@ -1,7 +1,7 @@
 import { useCallback, useLayoutEffect, useRef, useState } from "react"
 import {
   PreparedNodeType,
-  ActiveNodeType,
+  ActiveNodesType,
   SVGRefType,
   TreeType,
   PathType,
@@ -14,7 +14,7 @@ type TreeProps = { tree: TreeType }
 
 const Tree = ({ tree }: TreeProps) => {
   const preparedTree = createDataTree(tree)
-  const [activeNodes, setActiveNodes] = useState<ActiveNodeType>([])
+  const [activeNodes, setActiveNodes] = useState<ActiveNodesType>([])
   const [activeLeaf, setActiveLeaf] = useState<null | number>(null)
   const [targetRef, setTargetRef] = useState<SVGRefType | null>(null)
   const rootSvg = useRef<SVGSVGElement>(null)
@@ -44,8 +44,18 @@ const Tree = ({ tree }: TreeProps) => {
   }, [rootSvg])
 
   return (
-    <div style={{ width: "500px", height: "500px", fontSize: "10px" }}>
-      <svg viewBox="0 -10 500 500" xmlns="http://www.w3.org/2000/svg">
+    <div
+      style={{
+        fontSize: "10px",
+        paddingBottom: "92%",
+      }}
+      className="scaling-svg-container"
+    >
+      <svg
+        viewBox="0 -10 500 500"
+        xmlns="http://www.w3.org/2000/svg"
+        className="scaling-svg"
+      >
         <g className="svgLinesGroup" ref={rootSvg} width="500" height="500" />
         {targetRef && (
           <Recursive

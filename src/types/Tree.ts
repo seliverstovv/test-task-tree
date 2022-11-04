@@ -1,10 +1,11 @@
 import { RefObject } from "react"
 
+export type NodeId = number
 export interface NodeType {
-  id: number
+  id: NodeId
   x: number
   y: number
-  parent_id: number | null
+  parent_id: NodeId | null
 }
 
 export type TreeType = NodeType[]
@@ -21,15 +22,15 @@ export type PreparedTreeType = PreparedNodeType[]
 
 export type SVGRefType = RefObject<SVGSVGElement>
 
-export type ActiveNodeType = number[]
+export type ActiveNodesType = NodeId[]
 
-export type PathType = number[]
+export type PathType = NodeId[]
 
 export interface CommonPropsType {
   rootSvg: SVGRefType
   nodeClickHandler: (node: PreparedNodeType) => void
-  leafClickHandler: (id: number, path: PathType) => void
-  activeNodes: ActiveNodeType
-  activeLeaf: null | number
+  leafClickHandler: (id: NodeId, path: PathType) => void
+  activeNodes: ActiveNodesType
+  activeLeaf: null | NodeId
   path: PathType
 }

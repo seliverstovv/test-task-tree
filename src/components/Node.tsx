@@ -6,26 +6,45 @@ interface NodeProps extends CommonPropsType {
   node: PreparedNodeType
 }
 
-const Node = ({ node, rootSvg, clickHandler, activeNodes }: NodeProps) => {
+const Node = ({
+  node,
+  rootSvg,
+  nodeClickHandler,
+  leafClickHandler,
+  activeNodes,
+  activeLeaf,
+  path,
+}: NodeProps) => {
+  const isLeaf = node.childNodes.length === 0
+
   const renderLine = useCallback(
-    (n: PreparedNodeType) =>
-      n.parent_id &&
-      n.parent_xy && (
-        <line
-          x1={n.x}
-          y1={n.y}
-          x2={n.parent_xy.x}
-          y2={n.parent_xy.y}
-          stroke={activeNodes.includes(n.parent_id) ? "aqua" : "black"}
-        />
-      ),
-    [activeNodes]
+    (n: PreparedNodeType) => {
+      const isSelectPath = activeLeaf
+      const targetId = isSelectPath ? n.id : n.parent_id || -1
+      return (
+        n.parent_id &&
+        n.parent_xy && (
+          <line
+            x1={n.x}
+            y1={n.y}
+            x2={n.parent_xy.x}
+            y2={n.parent_xy.y}
+            stroke={activeNodes.includes(targetId) ? "aqua" : "black"}
+          />
+        )
+      )
+    },
+    [activeLeaf, activeNodes]
   )
 
   return (
     <>
       {rootSvg.current && createPortal(renderLine(node), rootSvg.current)}
-      <g onClick={() => clickHandler(node)}>
+      <g
+        onClick={() =>
+          isLeaf ? leafClickHandler(node.id, path) : nodeClickHandler(node)
+        }
+      >
         <circle
           stroke={activeNodes.includes(node.id) ? "lime" : "gray"}
           cx={node.x}

@@ -9,8 +9,11 @@ interface TreeProps extends CommonPropsType {
 const Recursive = ({
   preparedTree,
   rootSvg,
-  clickHandler,
+  nodeClickHandler,
+  leafClickHandler,
   activeNodes,
+  activeLeaf,
+  path,
 }: TreeProps) => {
   return (
     <>
@@ -20,14 +23,20 @@ const Recursive = ({
             node={node}
             rootSvg={rootSvg}
             activeNodes={activeNodes}
-            clickHandler={clickHandler}
+            activeLeaf={activeLeaf}
+            nodeClickHandler={nodeClickHandler}
+            leafClickHandler={leafClickHandler}
+            path={[...path, node.id]}
           />
           {node.childNodes.length !== 0 && (
             <Recursive
               preparedTree={node.childNodes}
               rootSvg={rootSvg}
               activeNodes={activeNodes}
-              clickHandler={clickHandler}
+              activeLeaf={activeLeaf}
+              nodeClickHandler={nodeClickHandler}
+              leafClickHandler={leafClickHandler}
+              path={[...path, node.id]}
             />
           )}
         </Fragment>

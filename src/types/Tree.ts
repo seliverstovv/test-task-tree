@@ -23,8 +23,13 @@ export type SVGRefType = RefObject<SVGSVGElement>
 
 export type ActiveNodeType = number[]
 
+export type PathType = number[]
+
 export interface CommonPropsType {
   rootSvg: SVGRefType
-  clickHandler: (node: PreparedNodeType) => void
+  nodeClickHandler: (node: PreparedNodeType) => void
+  leafClickHandler: (id: number, path: PathType) => void
   activeNodes: ActiveNodeType
+  activeLeaf: null | number
+  path: PathType
 }

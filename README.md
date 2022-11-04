@@ -1,4 +1,34 @@
-# Getting Started with Create React App
+# Тестовое задание
+### Нарисовать дерево
+
+Из внешнего API приходит дерево объектов в виде:
+```
+[
+    {id: 1, x: 100, y: 0, parent_id: null},
+    {id: 2, x: 80, y: 10, parent_id: 1},
+    {id: 3, x: 120, y: 10, parent_id: 1},
+    {id: 4, x: 70, y: 20, parent_id: 2},
+    {id: 5, x: 90, y: 20, parent_id: 2},
+    {id: 6, x: 130, y: 20, parent_id: 3}
+]
+```
+
+Нужно нарисовать это дерево на SVG с использованием react:
+
+      1
+     / \
+    2   3
+   /\    \
+  4  5    6
+
+#### Часть 1
+По клику на объект выделяем цветом его, всех его потомков и соединяющие их линии.
+#### Часть 2
+По клику на объект выделяем цветом его и путь к корневому элементу.
+
+gh-pages - https://seliverstovv.github.io/test-task-tree/
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

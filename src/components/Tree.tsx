@@ -1,13 +1,22 @@
-import { useCallback, useLayoutEffect, useRef, useState } from "react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
 import {
   PreparedNodeType,
   ActiveNodesType,
   SVGRefType,
   TreeType,
   PathType,
+  NodeClickHandlerType,
+  CommonClickHandlerType,
 } from "types/Tree"
 import createDataTree from "utils/createDataTree"
 import getChildIds from "utils/getChilds"
+import getPathBetweenNodes from "utils/getPathBetweenNodes"
 import Recursive from "./Recursive"
 
 type TreeProps = { tree: TreeType }
@@ -17,10 +26,35 @@ const Tree = ({ tree }: TreeProps) => {
   const [activeNodes, setActiveNodes] = useState<ActiveNodesType>([])
   const [activeLeaf, setActiveLeaf] = useState<null | number>(null)
   const [targetRef, setTargetRef] = useState<SVGRefType | null>(null)
+  const [activePaths, setActivePaths] = useState<PathType[] | null>(null)
+  const [activeElements, setActiveElements] = useState<number[] | null>(null)
+
   const rootSvg = useRef<SVGSVGElement>(null)
 
-  const setActiveNodeHandler = useCallback(
-    (node: PreparedNodeType) => {
+  const setBetweenNodePath = useCallback<CommonClickHandlerType>((id, path) => {
+    setActiveLeaf(null)
+    setActiveElements((prev) => {
+      if (!prev) {
+        return [id]
+      }
+
+      return [id, prev[0]]
+    })
+
+    setActivePaths((prev) => {
+      if (!prev) {
+        return [path]
+      }
+
+      return [path, prev[0]]
+    })
+  }, [])
+
+  const setActiveNodeHandler = useCallback<NodeClickHandlerType>(
+    (node) => {
+      setActiveElements(null)
+      setActivePaths(null)
+
       const setSelectChilds = () => {
         const ids = getChildIds(node)
         setActiveNodes([node.id, ...ids])
@@ -42,8 +76,11 @@ const Tree = ({ tree }: TreeProps) => {
     [activeLeaf, activeNodes]
   )
 
-  const setActiveLeafHandler = useCallback(
-    (id: number, path: PathType) => {
+  const setActiveLeafHandler = useCallback<CommonClickHandlerType>(
+    (id, path) => {
+      setActiveElements(null)
+      setActivePaths(null)
+
       if (id === activeLeaf) {
         setActiveLeaf(null)
         setActiveNodes([])
@@ -58,7 +95,13 @@ const Tree = ({ tree }: TreeProps) => {
 
   useLayoutEffect(() => {
     setTargetRef(rootSvg)
-  }, [rootSvg])
+
+    if (activePaths?.length === 2) {
+      setActiveNodes(() => getPathBetweenNodes(activePaths[0], activePaths[1]))
+    } else if (activePaths?.length === 1) {
+      setActiveNodes(activePaths[0])
+    }
+  }, [activePaths, rootSvg])
 
   return (
     <div
@@ -80,8 +123,10 @@ const Tree = ({ tree }: TreeProps) => {
             rootSvg={targetRef}
             activeNodes={activeNodes}
             activeLeaf={activeLeaf}
+            activeElements={activeElements}
             nodeClickHandler={setActiveNodeHandler}
             leafClickHandler={setActiveLeafHandler}
+            betweenPathHandler={setBetweenNodePath}
             path={[]}
           />
         )}

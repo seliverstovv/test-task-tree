@@ -11,8 +11,10 @@ const Recursive = ({
   rootSvg,
   nodeClickHandler,
   leafClickHandler,
+  betweenPathHandler,
   activeNodes,
   activeLeaf,
+  activeElements,
   path,
 }: TreeProps) => {
   return (
@@ -24,8 +26,10 @@ const Recursive = ({
             rootSvg={rootSvg}
             activeNodes={activeNodes}
             activeLeaf={activeLeaf}
+            activeElements={activeElements}
             nodeClickHandler={nodeClickHandler}
             leafClickHandler={leafClickHandler}
+            betweenPathHandler={betweenPathHandler}
             path={[...path, node.id]}
           />
           {node.childNodes.length !== 0 && (
@@ -34,8 +38,10 @@ const Recursive = ({
               rootSvg={rootSvg}
               activeNodes={activeNodes}
               activeLeaf={activeLeaf}
+              activeElements={activeElements}
               nodeClickHandler={nodeClickHandler}
               leafClickHandler={leafClickHandler}
+              betweenPathHandler={betweenPathHandler}
               path={[...path, node.id]}
             />
           )}

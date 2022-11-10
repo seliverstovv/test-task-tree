@@ -11,14 +11,18 @@ const Node = ({
   rootSvg,
   nodeClickHandler,
   leafClickHandler,
+  betweenPathHandler,
   activeNodes,
   activeLeaf,
+  activeElements,
   path,
 }: NodeProps) => {
   const isLeaf = node.childNodes.length === 0
 
   const getActiveNodeColor = () => {
     switch (true) {
+      case activeElements?.includes(node.id):
+        return "pink"
       case activeLeaf === node.id:
         return "tomato"
       case activeNodes.includes(node.id):
@@ -30,8 +34,20 @@ const Node = ({
 
   const renderLine = useCallback(
     (n: PreparedNodeType) => {
-      const isSelectPath = activeLeaf
-      const targetId = isSelectPath ? n.id : n.parent_id || -1
+      let isActiveLine = false
+      switch (true) {
+        case Boolean(activeLeaf):
+          isActiveLine = activeNodes.includes(n.id)
+          break
+        case Boolean(activeElements): {
+          const withoutFirst = activeNodes.slice(1)
+          isActiveLine = withoutFirst.includes(n.id)
+          break
+        }
+        default:
+          isActiveLine = activeNodes.includes(n.parent_id || 0)
+          break
+      }
 
       return (
         n.parent_id &&
@@ -41,21 +57,31 @@ const Node = ({
             y1={n.y}
             x2={n.parent_xy.x}
             y2={n.parent_xy.y}
-            stroke={activeNodes.includes(targetId) ? "aqua" : "black"}
+            stroke={isActiveLine ? "aqua" : "black"}
           />
         )
       )
     },
-    [activeLeaf, activeNodes]
+    [activeElements, activeLeaf, activeNodes]
   )
 
   return (
     <>
       {rootSvg.current && createPortal(renderLine(node), rootSvg.current)}
       <g
-        onClick={() =>
-          isLeaf ? leafClickHandler(node.id, path) : nodeClickHandler(node)
-        }
+        onClick={(e) => {
+          if (e.shiftKey) {
+            betweenPathHandler(node.id, path)
+            return
+          }
+
+          if (isLeaf) {
+            leafClickHandler(node.id, path)
+            return
+          }
+
+          nodeClickHandler(node)
+        }}
       >
         <circle
           stroke={getActiveNodeColor()}

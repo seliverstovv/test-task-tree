@@ -26,10 +26,16 @@ export type ActiveNodesType = NodeId[]
 
 export type PathType = NodeId[]
 
+export type NodeClickHandlerType = (node: PreparedNodeType) => void
+
+export type CommonClickHandlerType = (id: NodeId, path: PathType) => void
+
 export interface CommonPropsType {
   rootSvg: SVGRefType
-  nodeClickHandler: (node: PreparedNodeType) => void
-  leafClickHandler: (id: NodeId, path: PathType) => void
+  nodeClickHandler: NodeClickHandlerType
+  leafClickHandler: CommonClickHandlerType
+  betweenPathHandler: CommonClickHandlerType
+  activeElements: PathType | null
   activeNodes: ActiveNodesType
   activeLeaf: null | NodeId
   path: PathType

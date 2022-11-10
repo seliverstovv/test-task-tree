@@ -1,18 +1,12 @@
+import { useCallback, useLayoutEffect, useRef, useState } from "react"
 import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react"
-import {
-  PreparedNodeType,
   ActiveNodesType,
   SVGRefType,
   TreeType,
   PathType,
   NodeClickHandlerType,
-  CommonClickHandlerType,
+  LeafClickHandlerType,
+  PathClickHandlerType,
 } from "types/Tree"
 import createDataTree from "utils/createDataTree"
 import getChildIds from "utils/getChilds"
@@ -27,19 +21,11 @@ const Tree = ({ tree }: TreeProps) => {
   const [activeLeaf, setActiveLeaf] = useState<null | number>(null)
   const [targetRef, setTargetRef] = useState<SVGRefType | null>(null)
   const [activePaths, setActivePaths] = useState<PathType[] | null>(null)
-  const [activeElements, setActiveElements] = useState<number[] | null>(null)
 
   const rootSvg = useRef<SVGSVGElement>(null)
 
-  const setBetweenNodePath = useCallback<CommonClickHandlerType>((id, path) => {
+  const setBetweenNodePath = useCallback<PathClickHandlerType>((path) => {
     setActiveLeaf(null)
-    setActiveElements((prev) => {
-      if (!prev) {
-        return [id]
-      }
-
-      return [id, prev[0]]
-    })
 
     setActivePaths((prev) => {
       if (!prev) {
@@ -52,7 +38,6 @@ const Tree = ({ tree }: TreeProps) => {
 
   const setActiveNodeHandler = useCallback<NodeClickHandlerType>(
     (node) => {
-      setActiveElements(null)
       setActivePaths(null)
 
       const setSelectChilds = () => {
@@ -76,9 +61,8 @@ const Tree = ({ tree }: TreeProps) => {
     [activeLeaf, activeNodes]
   )
 
-  const setActiveLeafHandler = useCallback<CommonClickHandlerType>(
+  const setActiveLeafHandler = useCallback<LeafClickHandlerType>(
     (id, path) => {
-      setActiveElements(null)
       setActivePaths(null)
 
       if (id === activeLeaf) {
@@ -123,7 +107,7 @@ const Tree = ({ tree }: TreeProps) => {
             rootSvg={targetRef}
             activeNodes={activeNodes}
             activeLeaf={activeLeaf}
-            activeElements={activeElements}
+            activePaths={activePaths}
             nodeClickHandler={setActiveNodeHandler}
             leafClickHandler={setActiveLeafHandler}
             betweenPathHandler={setBetweenNodePath}

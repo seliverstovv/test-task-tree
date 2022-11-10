@@ -14,14 +14,18 @@ const Node = ({
   betweenPathHandler,
   activeNodes,
   activeLeaf,
-  activeElements,
+  activePaths,
   path,
 }: NodeProps) => {
   const isLeaf = node.childNodes.length === 0
 
   const getActiveNodeColor = () => {
+    const pathA = activePaths?.[0] || []
+    const pathB = activePaths?.[1] || []
+    const activeElements = [pathA[pathA.length - 1], pathB[pathB.length - 1]]
+
     switch (true) {
-      case activeElements?.includes(node.id):
+      case activeElements.includes(node.id):
         return "pink"
       case activeLeaf === node.id:
         return "tomato"
@@ -39,7 +43,7 @@ const Node = ({
         case Boolean(activeLeaf):
           isActiveLine = activeNodes.includes(n.id)
           break
-        case Boolean(activeElements): {
+        case Boolean(activePaths): {
           const withoutFirst = activeNodes.slice(1)
           isActiveLine = withoutFirst.includes(n.id)
           break
@@ -62,7 +66,7 @@ const Node = ({
         )
       )
     },
-    [activeElements, activeLeaf, activeNodes]
+    [activeLeaf, activeNodes, activePaths]
   )
 
   return (
@@ -71,7 +75,7 @@ const Node = ({
       <g
         onClick={(e) => {
           if (e.shiftKey) {
-            betweenPathHandler(node.id, path)
+            betweenPathHandler(path)
             return
           }
 

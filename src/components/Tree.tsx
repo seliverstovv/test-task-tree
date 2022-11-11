@@ -17,7 +17,7 @@ const Tree = ({ preparedTree }: TreeProps) => {
   }, [rootSvg])
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -20 500 250" width="100%" height="100%">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="15 -10 150 100" width="100%">
       <g ref={rootSvg} className={styles.svgLinesGroup} />
       <g>
         {targetRef && <Recursive preparedTree={preparedTree} rootSvg={targetRef} path={[]} />}

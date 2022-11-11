@@ -2,7 +2,7 @@ import { RefObject } from "react"
 
 export type NodeIdType = number
 
-export interface NodeType {
+export type NodeType = {
   id: NodeIdType
   x: number
   y: number
@@ -11,7 +11,7 @@ export interface NodeType {
 
 export type TreeType = NodeType[]
 
-export interface PreparedNodeType extends NodeType {
+export type PreparedNodeType = NodeType & {
   childNodes: PreparedNodeType[]
   parent_xy?: {
     x: number

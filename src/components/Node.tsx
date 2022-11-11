@@ -1,4 +1,3 @@
-import { useCallback } from "react"
 import { createPortal } from "react-dom"
 import { useAppDispath, useAppSelector } from "store/hooks"
 import { CommonPropsType, PreparedNodeType } from "types/TreeTypes"
@@ -12,6 +11,7 @@ import {
   activeLeaf,
   activePathFirstItemsSelector,
 } from "features/selectors"
+import RenderLine from "components/RenderLine"
 
 type NodeProps = CommonPropsType & {
   node: PreparedNodeType
@@ -24,55 +24,31 @@ const Node = ({ node, rootSvg, path }: NodeProps) => {
   const activeLeafState = useAppSelector(activeLeaf)
   const activePathElements = useAppSelector(activePathFirstItemsSelector)
 
-  const getActiveNodeColor = () => {
+  const getNodeColor = () => {
     switch (true) {
-      case activePathElements.includes(node.id):
+      case activePathElements?.includes(node.id):
         return "pink"
       case activeLeafState === node.id:
         return "tomato"
       case activeNodesState.includes(node.id):
-        return "lime"
+        return "lightgreen"
       default:
         return "gray"
     }
   }
 
-  const renderLine = useCallback(
-    (n: PreparedNodeType) => {
-      let isActiveLine = false
-      switch (true) {
-        case Boolean(activePathElements): {
-          const withoutFirst = activeNodesState.slice(1)
-          isActiveLine = withoutFirst.includes(n.id)
-          break
-        }
-        case Boolean(activeLeaf):
-          isActiveLine = activeNodesState.includes(n.id)
-          break
-        default:
-          isActiveLine = activeNodesState.includes(n.parent_id || 0)
-          break
-      }
-
-      return (
-        n.parent_id &&
-        n.parent_xy && (
-          <line
-            x1={n.x}
-            y1={n.y}
-            x2={n.parent_xy.x}
-            y2={n.parent_xy.y}
-            stroke={isActiveLine ? "aqua" : "black"}
-          />
-        )
-      )
-    },
-    [activeNodesState, activePathElements]
-  )
-
   return (
     <>
-      {rootSvg.current && createPortal(renderLine(node), rootSvg.current)}
+      {rootSvg.current &&
+        createPortal(
+          RenderLine({
+            node,
+            activeNodes: activeNodesState,
+            activeLeaf: activeLeafState,
+            activePathElements,
+          }),
+          rootSvg.current
+        )}
       <g
         onClick={(e) => {
           if (e.shiftKey) {
@@ -89,7 +65,7 @@ const Node = ({ node, rootSvg, path }: NodeProps) => {
         }}
       >
         <circle
-          stroke={getActiveNodeColor()}
+          stroke={getNodeColor()}
           cx={node.x}
           cy={node.y}
           r="5"
@@ -103,7 +79,7 @@ const Node = ({ node, rootSvg, path }: NodeProps) => {
           fill="black"
           dy=".3em"
           fontSize={5}
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", userSelect: "none" }}
         >
           {node.id}
         </text>

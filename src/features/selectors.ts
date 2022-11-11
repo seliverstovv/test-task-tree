@@ -13,9 +13,16 @@ export const activePathFirstItemsSelector = createSelector(
 
     const firstArrayLastIndex = firstArray.length - 1
     const secondArrayLastIndex = secondArray.length - 1
-    return [
+
+    const result = [
       firstArray[firstArrayLastIndex] || null,
       secondArray[secondArrayLastIndex] || null,
-    ]
+    ].filter((item) => item !== null)
+
+    return result.length ? result : null
   }
 )
+
+export type ActivePathElementsType = ReturnType<
+  typeof activePathFirstItemsSelector
+>

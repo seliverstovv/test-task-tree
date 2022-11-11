@@ -21,6 +21,7 @@
         "no-param-reassign": "off",
         "prefer-destructuring": "off",
         "no-unused-vars": "off",
+        "camelcase": "off",
         "semi": 0,
 		"react/react-in-jsx-scope": "off",
         "react/function-component-definition": "off",

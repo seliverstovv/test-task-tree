@@ -2,21 +2,19 @@ import { useCallback, useLayoutEffect, useRef, useState } from "react"
 import {
   ActiveNodesType,
   SVGRefType,
-  TreeType,
   PathType,
   NodeClickHandlerType,
   LeafClickHandlerType,
   PathClickHandlerType,
+  PreparedTreeType,
 } from "types/Tree"
-import createDataTree from "utils/createDataTree"
 import getChildIds from "utils/getChilds"
 import getPathBetweenNodes from "utils/getPathBetweenNodes"
 import Recursive from "./Recursive"
 
-type TreeProps = { tree: TreeType }
+type TreeProps = { preparedTree: PreparedTreeType }
 
-const Tree = ({ tree }: TreeProps) => {
-  const preparedTree = createDataTree(tree)
+const Tree = ({ preparedTree }: TreeProps) => {
   const [activeNodes, setActiveNodes] = useState<ActiveNodesType>([])
   const [activeLeaf, setActiveLeaf] = useState<null | number>(null)
   const [targetRef, setTargetRef] = useState<SVGRefType | null>(null)

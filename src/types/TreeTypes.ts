@@ -25,7 +25,7 @@ export type SVGRefType = RefObject<SVGSVGElement>
 
 export type NodeIdsType = NodeIdType[]
 
-export interface CommonPropsType {
+export type CommonPropsType = {
   rootSvg: SVGRefType
   path: NodeIdsType
 }

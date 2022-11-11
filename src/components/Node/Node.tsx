@@ -8,9 +8,9 @@ import {
   activePathSelector,
   activeModeSelector,
 } from "features/selectors"
-import RenderLine from "components/RenderLine"
+import RenderLine from "components/Node/RenderLine"
+import styles from "styles/node.module.css"
 import useNodeStyles from "./useNodeStyles"
-import styles from "./styles.module.css"
 
 type NodeProps = CommonPropsType & {
   node: PreparedNodeType

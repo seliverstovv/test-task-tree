@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react"
 import { SVGRefType, PreparedTreeType } from "types/TreeTypes"
+import styles from "styles/tree.module.css"
 import Recursive from "./Recursive"
-import styles from "./styles.module.css"
 
 type TreeProps = {
   preparedTree: PreparedTreeType

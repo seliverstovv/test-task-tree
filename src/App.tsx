@@ -1,7 +1,7 @@
 import createDataTree from "utils/createDataTree"
 import Tree from "./components/Tree"
 import treeData from "./data"
-import styles from "./index.module.css"
+import styles from "./styles/app.module.css"
 
 const App = () => {
   const preparedTree = createDataTree(treeData)

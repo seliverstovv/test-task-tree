@@ -1,5 +1,5 @@
 import { useAppSelector } from "store/hooks"
-import { activeNodesSelector, selectModeSelector } from "features/selectors"
+import { activeNodesSelector, activeModeSelector } from "features/selectors"
 import { PreparedNodeType } from "types/TreeTypes"
 
 type RenderLineProps = {
@@ -7,7 +7,7 @@ type RenderLineProps = {
 }
 
 const RenderLine = ({ node }: RenderLineProps) => {
-  const selectMode = useAppSelector(selectModeSelector)
+  const selectMode = useAppSelector(activeModeSelector)
   const activeNodes = useAppSelector(activeNodesSelector)
 
   const { id, x, y, parent_id, parent_xy } = node
@@ -27,7 +27,7 @@ const RenderLine = ({ node }: RenderLineProps) => {
       }
 
       default: {
-        const isActive = activeNodes.includes(parent_id || -1)
+        const isActive = activeNodes.includes(parent_id!)
         return isActive ? "lightgreen" : disabledColor
       }
     }

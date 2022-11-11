@@ -5,9 +5,12 @@ import { setActiveLeaf, setActiveNodes, setActivePaths } from "features/TreeSlic
 import {
   activeNodesSelector,
   activeLeafSelector,
-  activeItemsPathSelector,
+  activePathSelector,
+  activeModeSelector,
 } from "features/selectors"
 import RenderLine from "components/RenderLine"
+import useNodeStyles from "./useNodeStyles"
+import styles from "./styles.module.css"
 
 type NodeProps = CommonPropsType & {
   node: PreparedNodeType
@@ -18,20 +21,16 @@ const Node = ({ node, rootSvg, path }: NodeProps) => {
   const dispatch = useAppDispath()
   const activeNodes = useAppSelector(activeNodesSelector)
   const activeLeaf = useAppSelector(activeLeafSelector)
-  const activePathElements = useAppSelector(activeItemsPathSelector)
+  const selectMode = useAppSelector(activeModeSelector)
+  const activePathElements = useAppSelector(activePathSelector)
 
-  const getNodeColor = () => {
-    switch (true) {
-      case activePathElements?.includes(node.id):
-        return "pink"
-      case activeLeaf === node.id:
-        return "tomato"
-      case activeNodes.includes(node.id):
-        return "lightgreen"
-      default:
-        return "gray"
-    }
-  }
+  const { color, strokeWith } = useNodeStyles(
+    node,
+    activePathElements,
+    activeLeaf,
+    activeNodes,
+    selectMode
+  )
 
   return (
     <>
@@ -52,12 +51,13 @@ const Node = ({ node, rootSvg, path }: NodeProps) => {
         }}
       >
         <circle
-          stroke={getNodeColor()}
+          stroke={color}
           cx={node.x}
           cy={node.y}
           r="5"
           fill="white"
-          style={{ cursor: "pointer" }}
+          className={styles.item}
+          strokeWidth={strokeWith}
         />
         <text
           x={node.x}
@@ -66,7 +66,7 @@ const Node = ({ node, rootSvg, path }: NodeProps) => {
           fill="black"
           dy=".3em"
           fontSize={5}
-          style={{ cursor: "pointer", userSelect: "none" }}
+          className={styles.item}
         >
           {node.id}
         </text>

@@ -1,8 +1,11 @@
 import { useLayoutEffect, useRef, useState } from "react"
 import { SVGRefType, PreparedTreeType } from "types/TreeTypes"
 import Recursive from "./Recursive"
+import styles from "./styles.module.css"
 
-type TreeProps = { preparedTree: PreparedTreeType }
+type TreeProps = {
+  preparedTree: PreparedTreeType
+}
 
 const Tree = ({ preparedTree }: TreeProps) => {
   const [targetRef, setTargetRef] = useState<SVGRefType | null>(null)
@@ -14,18 +17,12 @@ const Tree = ({ preparedTree }: TreeProps) => {
   }, [rootSvg])
 
   return (
-    <div
-      style={{
-        fontSize: "10px",
-        paddingBottom: "92%",
-      }}
-      className="scaling-svg-container"
-    >
-      <svg viewBox="0 -10 500 500" xmlns="http://www.w3.org/2000/svg" className="scaling-svg">
-        <g className="svgLinesGroup" ref={rootSvg} width="500" height="500" />
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -20 500 250" width="100%" height="100%">
+      <g ref={rootSvg} className={styles.svgLinesGroup} />
+      <g>
         {targetRef && <Recursive preparedTree={preparedTree} rootSvg={targetRef} path={[]} />}
-      </svg>
-    </div>
+      </g>
+    </svg>
   )
 }
 

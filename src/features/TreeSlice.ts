@@ -8,7 +8,10 @@ export type SelectModeType = "path" | "leaf" | "node"
 export type TreeStateType = {
   activeNodes: NodeIdsType
   activeLeaf: NodeIdType | null
-  activePaths: NodeIdsType[] | null
+  activePaths: {
+    a: NodeIdsType | null
+    b: NodeIdsType | null
+  } | null
   selectMode: SelectModeType
 }
 
@@ -57,18 +60,19 @@ const treeSlice = createSlice({
       state.selectMode = "path"
       state.activeLeaf = null
 
-      const perevState = state.activePaths
-      const newState = perevState ? [payload, perevState[0]] : [payload]
-      state.activePaths = newState
-
-      if (newState?.length === 2) {
-        state.activeNodes = getPathBetweenNodes(newState[0], newState[1])
+      if (state.activePaths?.a) {
+        const oldState = state.activePaths.a
+        state.activeNodes = getPathBetweenNodes(oldState, payload)
+        state.activePaths.a = payload
+        state.activePaths.b = oldState
         return
       }
 
-      if (newState?.length === 1) {
-        state.activeNodes = newState[0]
+      state.activePaths = {
+        a: payload,
+        b: null,
       }
+      state.activeNodes = payload
     },
   },
 })

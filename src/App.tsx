@@ -8,6 +8,7 @@ const App = () => {
 
   return (
     <div className={styles.app}>
+      <p className={styles.text}>Для выделения пути между нодами, зажмите клавишу shift</p>
       <Tree preparedTree={preparedTree} />
     </div>
   )

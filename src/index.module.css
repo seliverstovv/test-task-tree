@@ -6,3 +6,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.text {
+  font-size: 20px;
+  padding-left: 50px;
+  padding-top: 30px;
+}

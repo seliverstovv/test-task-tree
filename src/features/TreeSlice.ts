@@ -3,16 +3,20 @@ import { NodeIdType, NodeIdsType, PreparedNodeType } from "types/TreeTypes"
 import getChildIds from "utils/getChilds"
 import getPathBetweenNodes from "utils/getPathBetweenNodes"
 
+export type SelectModeType = "path" | "leaf" | "node"
+
 export type TreeStateType = {
   activeNodes: NodeIdsType
   activeLeaf: NodeIdType | null
   activePaths: NodeIdsType[] | null
+  selectMode: SelectModeType
 }
 
 const initialState: TreeStateType = {
   activeNodes: [],
   activeLeaf: null,
   activePaths: null,
+  selectMode: "node",
 }
 
 type SetActiveLeaftType = PayloadAction<{ id: NodeIdType; path: NodeIdsType }>
@@ -22,6 +26,7 @@ const treeSlice = createSlice({
   initialState,
   reducers: {
     setActiveNodes(state, { payload }: PayloadAction<PreparedNodeType>) {
+      state.selectMode = "node"
       state.activePaths = null
       state.activeLeaf = null
 
@@ -35,6 +40,7 @@ const treeSlice = createSlice({
     },
 
     setActiveLeaf(state, { payload }: SetActiveLeaftType) {
+      state.selectMode = "leaf"
       state.activePaths = null
 
       if (payload.id === state.activeLeaf) {
@@ -48,6 +54,7 @@ const treeSlice = createSlice({
     },
 
     setActivePaths(state, { payload }: PayloadAction<NodeIdsType>) {
+      state.selectMode = "path"
       state.activeLeaf = null
 
       const perevState = state.activePaths
@@ -66,7 +73,6 @@ const treeSlice = createSlice({
   },
 })
 
-export const { setActiveNodes, setActiveLeaf, setActivePaths } =
-  treeSlice.actions
+export const { setActiveNodes, setActiveLeaf, setActivePaths } = treeSlice.actions
 
 export default treeSlice.reducer

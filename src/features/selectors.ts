@@ -1,12 +1,11 @@
 import { RootState } from "store"
 
-export const activeNodes = (state: RootState) => state.treeReducer.activeNodes
-export const activeLeaf = (state: RootState) => state.treeReducer.activeLeaf
-export const activePath = (state: RootState) => state.treeReducer.activePaths
+export const activeNodesSelector = ({ treeReducer }: RootState) => treeReducer.activeNodes
+export const activeLeafSelector = ({ treeReducer }: RootState) => treeReducer.activeLeaf
+export const activePathSelector = ({ treeReducer }: RootState) => treeReducer.activePaths
+export const selectModeSelector = ({ treeReducer }: RootState) => treeReducer.selectMode
 
-export const activeItemsPathSelector = ({
-  treeReducer: { activePaths },
-}: RootState) => {
+export const activeItemsPathSelector = ({ treeReducer: { activePaths } }: RootState) => {
   const firstArray = activePaths?.[0] || []
   const secondArray = activePaths?.[1] || []
 
@@ -20,5 +19,3 @@ export const activeItemsPathSelector = ({
 
   return result.length ? result : null
 }
-
-export type ActiveItemsPathType = ReturnType<typeof activeItemsPathSelector>

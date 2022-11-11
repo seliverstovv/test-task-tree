@@ -1,14 +1,10 @@
 import { createPortal } from "react-dom"
 import { useAppDispath, useAppSelector } from "store/hooks"
 import { CommonPropsType, PreparedNodeType } from "types/TreeTypes"
+import { setActiveLeaf, setActiveNodes, setActivePaths } from "features/TreeSlice"
 import {
-  setActiveLeaf,
-  setActiveNodes,
-  setActivePaths,
-} from "features/TreeSlice"
-import {
-  activeNodes,
-  activeLeaf,
+  activeNodesSelector,
+  activeLeafSelector,
   activeItemsPathSelector,
 } from "features/selectors"
 import RenderLine from "components/RenderLine"
@@ -20,17 +16,17 @@ type NodeProps = CommonPropsType & {
 const Node = ({ node, rootSvg, path }: NodeProps) => {
   const isLeaf = node.childNodes.length === 0
   const dispatch = useAppDispath()
-  const activeNodesState = useAppSelector(activeNodes)
-  const activeLeafState = useAppSelector(activeLeaf)
+  const activeNodes = useAppSelector(activeNodesSelector)
+  const activeLeaf = useAppSelector(activeLeafSelector)
   const activePathElements = useAppSelector(activeItemsPathSelector)
 
   const getNodeColor = () => {
     switch (true) {
       case activePathElements?.includes(node.id):
         return "pink"
-      case activeLeafState === node.id:
+      case activeLeaf === node.id:
         return "tomato"
-      case activeNodesState.includes(node.id):
+      case activeNodes.includes(node.id):
         return "lightgreen"
       default:
         return "gray"
@@ -39,16 +35,7 @@ const Node = ({ node, rootSvg, path }: NodeProps) => {
 
   return (
     <>
-      {rootSvg.current &&
-        createPortal(
-          RenderLine({
-            node,
-            activeNodes: activeNodesState,
-            activeLeaf: activeLeafState,
-            activePathElements,
-          }),
-          rootSvg.current
-        )}
+      {rootSvg.current && createPortal(RenderLine({ node }), rootSvg.current)}
       <g
         onClick={(e) => {
           if (e.shiftKey) {

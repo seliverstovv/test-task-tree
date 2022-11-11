@@ -1,27 +1,27 @@
-import { ActiveItemsPathType } from "features/selectors"
-import { NodeIdsType, NodeIdType, PreparedNodeType } from "types/TreeTypes"
+import { useAppSelector } from "store/hooks"
+import { activeNodesSelector, selectModeSelector } from "features/selectors"
+import { PreparedNodeType } from "types/TreeTypes"
 
 type RenderLineProps = {
   node: PreparedNodeType
-  activePathElements: ActiveItemsPathType
-  activeNodes: NodeIdsType
-  activeLeaf: NodeIdType | null
 }
 
-const RenderLine = (props: RenderLineProps) => {
-  const { node, activeNodes, activeLeaf, activePathElements } = props
+const RenderLine = ({ node }: RenderLineProps) => {
+  const selectMode = useAppSelector(selectModeSelector)
+  const activeNodes = useAppSelector(activeNodesSelector)
+
   const { id, x, y, parent_id, parent_xy } = node
 
   const getLineColor = () => {
     const disabledColor = "gray"
     switch (true) {
-      case Boolean(activePathElements): {
+      case selectMode === "path": {
         const withoutFirst = activeNodes.slice(1)
         const isActive = withoutFirst.includes(id)
         return isActive ? "palevioletred" : disabledColor
       }
 
-      case Boolean(activeLeaf): {
+      case selectMode === "leaf": {
         const isActive = activeNodes.includes(id)
         return isActive ? "yellowgreen" : disabledColor
       }
@@ -36,13 +36,7 @@ const RenderLine = (props: RenderLineProps) => {
   return (
     parent_id &&
     parent_xy && (
-      <line
-        x1={x}
-        y1={y}
-        x2={parent_xy.x}
-        y2={parent_xy.y}
-        stroke={getLineColor()}
-      />
+      <line x1={x} y1={y} x2={parent_xy.x} y2={parent_xy.y} stroke={getLineColor()} />
     )
   )
 }

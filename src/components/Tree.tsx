@@ -21,19 +21,9 @@ const Tree = ({ preparedTree }: TreeProps) => {
       }}
       className="scaling-svg-container"
     >
-      <svg
-        viewBox="0 -10 500 500"
-        xmlns="http://www.w3.org/2000/svg"
-        className="scaling-svg"
-      >
+      <svg viewBox="0 -10 500 500" xmlns="http://www.w3.org/2000/svg" className="scaling-svg">
         <g className="svgLinesGroup" ref={rootSvg} width="500" height="500" />
-        {targetRef && (
-          <Recursive
-            preparedTree={preparedTree}
-            rootSvg={targetRef}
-            path={[]}
-          />
-        )}
+        {targetRef && <Recursive preparedTree={preparedTree} rootSvg={targetRef} path={[]} />}
       </svg>
     </div>
   )

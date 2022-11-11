@@ -1,4 +1,4 @@
-import { PreparedTreeType, TreeType } from "types/Tree"
+import { PreparedTreeType, TreeType } from "types/TreeTypes"
 
 const createDataTree = (flatTree: TreeType) => {
   const hashTable: PreparedTreeType = Object.create(null)

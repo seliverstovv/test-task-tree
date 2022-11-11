@@ -1,4 +1,4 @@
-import { PreparedNodeType } from "types/Tree"
+import { PreparedNodeType } from "types/TreeTypes"
 
 const getChildIds = (dataTree: PreparedNodeType) => {
   const childsIds: number[] = []

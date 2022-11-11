@@ -1,35 +1,36 @@
 import { useCallback } from "react"
 import { createPortal } from "react-dom"
-import { CommonPropsType, PreparedNodeType } from "types/Tree"
+import { useAppDispath, useAppSelector } from "store/hooks"
+import { CommonPropsType, PreparedNodeType } from "types/TreeTypes"
+import {
+  setActiveLeaf,
+  setActiveNodes,
+  setActivePaths,
+} from "features/TreeSlice"
+import {
+  activeNodes,
+  activeLeaf,
+  activePathFirstItemsSelector,
+} from "features/selectors"
 
-interface NodeProps extends CommonPropsType {
+type NodeProps = CommonPropsType & {
   node: PreparedNodeType
 }
 
-const Node = ({
-  node,
-  rootSvg,
-  nodeClickHandler,
-  leafClickHandler,
-  betweenPathHandler,
-  activeNodes,
-  activeLeaf,
-  activePaths,
-  path,
-}: NodeProps) => {
+const Node = ({ node, rootSvg, path }: NodeProps) => {
   const isLeaf = node.childNodes.length === 0
+  const dispatch = useAppDispath()
+  const activeNodesState = useAppSelector(activeNodes)
+  const activeLeafState = useAppSelector(activeLeaf)
+  const activePathElements = useAppSelector(activePathFirstItemsSelector)
 
   const getActiveNodeColor = () => {
-    const pathA = activePaths?.[0] || []
-    const pathB = activePaths?.[1] || []
-    const activeElements = [pathA[pathA.length - 1], pathB[pathB.length - 1]]
-
     switch (true) {
-      case activeElements.includes(node.id):
+      case activePathElements.includes(node.id):
         return "pink"
-      case activeLeaf === node.id:
+      case activeLeafState === node.id:
         return "tomato"
-      case activeNodes.includes(node.id):
+      case activeNodesState.includes(node.id):
         return "lime"
       default:
         return "gray"
@@ -40,16 +41,16 @@ const Node = ({
     (n: PreparedNodeType) => {
       let isActiveLine = false
       switch (true) {
-        case Boolean(activeLeaf):
-          isActiveLine = activeNodes.includes(n.id)
-          break
-        case Boolean(activePaths): {
-          const withoutFirst = activeNodes.slice(1)
+        case Boolean(activePathElements): {
+          const withoutFirst = activeNodesState.slice(1)
           isActiveLine = withoutFirst.includes(n.id)
           break
         }
+        case Boolean(activeLeaf):
+          isActiveLine = activeNodesState.includes(n.id)
+          break
         default:
-          isActiveLine = activeNodes.includes(n.parent_id || 0)
+          isActiveLine = activeNodesState.includes(n.parent_id || 0)
           break
       }
 
@@ -66,7 +67,7 @@ const Node = ({
         )
       )
     },
-    [activeLeaf, activeNodes, activePaths]
+    [activeNodesState, activePathElements]
   )
 
   return (
@@ -75,16 +76,16 @@ const Node = ({
       <g
         onClick={(e) => {
           if (e.shiftKey) {
-            betweenPathHandler(path)
+            dispatch(setActivePaths(path))
             return
           }
 
           if (isLeaf) {
-            leafClickHandler(node.id, path)
+            dispatch(setActiveLeaf({ id: node.id, path }))
             return
           }
 
-          nodeClickHandler(node)
+          dispatch(setActiveNodes(node))
         }}
       >
         <circle

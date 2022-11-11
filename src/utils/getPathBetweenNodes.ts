@@ -1,6 +1,6 @@
-import { PathType } from "types/Tree"
+import { NodeIdsType } from "types/TreeTypes"
 
-const getPathBetweenNodes = (pathA: PathType, pathB: PathType) => {
+const getPathBetweenNodes = (pathA: NodeIdsType, pathB: NodeIdsType) => {
   let rootElement = 0
   const lastIndexA = pathA.length - 1
   const lastIndexB = pathB.length - 1

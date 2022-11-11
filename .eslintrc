@@ -18,6 +18,8 @@
         }
     },
     "rules": {
+        "no-param-reassign": "off",
+        "prefer-destructuring": "off",
         "no-unused-vars": "off",
         "semi": 0,
 		"react/react-in-jsx-scope": "off",

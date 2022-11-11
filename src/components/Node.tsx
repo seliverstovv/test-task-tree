@@ -9,7 +9,7 @@ import {
 import {
   activeNodes,
   activeLeaf,
-  activePathFirstItemsSelector,
+  activeItemsPathSelector,
 } from "features/selectors"
 import RenderLine from "components/RenderLine"
 
@@ -22,7 +22,7 @@ const Node = ({ node, rootSvg, path }: NodeProps) => {
   const dispatch = useAppDispath()
   const activeNodesState = useAppSelector(activeNodes)
   const activeLeafState = useAppSelector(activeLeaf)
-  const activePathElements = useAppSelector(activePathFirstItemsSelector)
+  const activePathElements = useAppSelector(activeItemsPathSelector)
 
   const getNodeColor = () => {
     switch (true) {

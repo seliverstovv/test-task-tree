@@ -1,9 +1,9 @@
-import { ActivePathElementsType } from "features/selectors"
+import { ActiveItemsPathType } from "features/selectors"
 import { NodeIdsType, NodeIdType, PreparedNodeType } from "types/TreeTypes"
 
 type RenderLineProps = {
   node: PreparedNodeType
-  activePathElements: ActivePathElementsType
+  activePathElements: ActiveItemsPathType
   activeNodes: NodeIdsType
   activeLeaf: NodeIdType | null
 }

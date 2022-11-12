@@ -3,7 +3,6 @@ import { RootState } from "store"
 export const activeNodesSelector = ({ treeReducer }: RootState) => treeReducer.activeNodes
 export const activeLeafSelector = ({ treeReducer }: RootState) => treeReducer.activeLeaf
 export const activeModeSelector = ({ treeReducer }: RootState) => treeReducer.activeMode
-export const scaleValueSelector = ({ treeReducer }: RootState) => treeReducer.scaleValue
 
 export const activePathSelector = ({ treeReducer: { activePaths } }: RootState) => {
   const firstArray = activePaths?.a || []

@@ -25,7 +25,6 @@ export default [
   { id: 24, x: 220, y: 180, parent_id: 21 },
   { id: 25, x: 280, y: 180, parent_id: 22 },
   { id: 26, x: 300, y: 180, parent_id: 22 },
-
   { id: 27, x: 200, y: 200, parent_id: 24 },
   { id: 28, x: 220, y: 200, parent_id: 24 },
   { id: 29, x: 240, y: 200, parent_id: 24 },

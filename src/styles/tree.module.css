@@ -5,16 +5,9 @@
 .scaleRoot {
   display: inline-block;
   transform-origin: left top;
-  height: 25vh;
-}
-
-.svgRoot {
-  transform: scale(1.1);
-  /* height: calc(100% - 193px); */
-  height: 25vh;
+  transform: scale(3.5);
 }
 
 .svgInside {
   transform-origin: center;
-  transform: scale(0.9);
 }

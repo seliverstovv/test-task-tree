@@ -12,14 +12,16 @@ export type TreeStateType = {
     a: NodeIdsType | null
     b: NodeIdsType | null
   } | null
-  selectMode: SelectModeType
+  activeMode: SelectModeType
+  scaleValue: string
 }
 
 const initialState: TreeStateType = {
   activeNodes: [],
   activeLeaf: null,
   activePaths: null,
-  selectMode: "node",
+  activeMode: "node",
+  scaleValue: "3",
 }
 
 type SetActiveLeaftType = PayloadAction<{ id: NodeIdType; path: NodeIdsType }>
@@ -29,7 +31,7 @@ const treeSlice = createSlice({
   initialState,
   reducers: {
     setActiveNodes(state, { payload }: PayloadAction<PreparedNodeType>) {
-      state.selectMode = "node"
+      state.activeMode = "node"
       state.activePaths = null
       state.activeLeaf = null
 
@@ -43,7 +45,7 @@ const treeSlice = createSlice({
     },
 
     setActiveLeaf(state, { payload }: SetActiveLeaftType) {
-      state.selectMode = "leaf"
+      state.activeMode = "leaf"
       state.activePaths = null
 
       if (payload.id === state.activeLeaf) {
@@ -57,7 +59,7 @@ const treeSlice = createSlice({
     },
 
     setActivePaths(state, { payload }: PayloadAction<NodeIdsType>) {
-      state.selectMode = "path"
+      state.activeMode = "path"
       state.activeLeaf = null
 
       if (state.activePaths?.a) {
@@ -74,9 +76,14 @@ const treeSlice = createSlice({
       }
       state.activeNodes = payload
     },
+
+    setScaleValue(state, { payload }: PayloadAction<string>) {
+      state.scaleValue = payload
+    },
   },
 })
 
-export const { setActiveNodes, setActiveLeaf, setActivePaths } = treeSlice.actions
+export const { setActiveNodes, setActiveLeaf, setActivePaths, setScaleValue } =
+  treeSlice.actions
 
 export default treeSlice.reducer

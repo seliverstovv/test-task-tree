@@ -1,3 +1,20 @@
 .svgLinesGroup:focus {
   outline: none !important;
 }
+
+.scaleRoot {
+  display: inline-block;
+  transform-origin: left top;
+  height: 25vh;
+}
+
+.svgRoot {
+  transform: scale(1.1);
+  /* height: calc(100% - 193px); */
+  height: 25vh;
+}
+
+.svgInside {
+  transform-origin: center;
+  transform: scale(0.9);
+}

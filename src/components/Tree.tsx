@@ -1,5 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react"
 import { SVGRefType, PreparedTreeType } from "types/TreeTypes"
+import { useAppSelector } from "store/hooks"
+import { scaleValueSelector } from "features/selectors"
 import styles from "styles/tree.module.css"
 import Recursive from "./Recursive"
 
@@ -9,6 +11,7 @@ type TreeProps = {
 
 const Tree = ({ preparedTree }: TreeProps) => {
   const [targetRef, setTargetRef] = useState<SVGRefType | null>(null)
+  const scaleValue = useAppSelector(scaleValueSelector)
 
   const rootSvg = useRef<SVGSVGElement>(null)
 
@@ -17,12 +20,18 @@ const Tree = ({ preparedTree }: TreeProps) => {
   }, [rootSvg])
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="15 -10 150 100" width="100%">
-      <g ref={rootSvg} className={styles.svgLinesGroup} />
-      <g>
-        {targetRef && <Recursive preparedTree={preparedTree} rootSvg={targetRef} path={[]} />}
-      </g>
-    </svg>
+    <div className={styles.scaleRoot} style={{ transform: `scale(${scaleValue})` }}>
+      <svg xmlns="http://www.w3.org/2000/svg" className={styles.svgRoot}>
+        <g className={styles.svgInside}>
+          <g ref={rootSvg} className={styles.svgLinesGroup} />
+          <g>
+            {targetRef && (
+              <Recursive preparedTree={preparedTree} rootSvg={targetRef} path={[]} />
+            )}
+          </g>
+        </g>
+      </svg>
+    </div>
   )
 }
 

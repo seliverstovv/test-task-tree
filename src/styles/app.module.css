@@ -7,8 +7,31 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin-bottom: 100px;
+  border: 1px solid coral;
+  z-index: 999;
+}
+
 .text {
   font-size: 20px;
-  padding-left: 50px;
-  padding-top: 30px;
+  padding: 10px;
+}
+
+.slider {
+  cursor: pointer;
+}
+
+.scale {
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  margin-right: 20px;
 }

@@ -5,12 +5,14 @@ import getPathBetweenNodes from "utils/getPathBetweenNodes"
 
 export type SelectModeType = "path" | "leaf" | "node"
 
+type SelectPathType = { select: NodeIdType; path: NodeIdsType }
+
 export type TreeStateType = {
   activeNodes: NodeIdsType
   activeLeaf: NodeIdType | null
   activePaths: {
-    a: NodeIdsType | null
-    b: NodeIdsType | null
+    a: SelectPathType | null
+    b: SelectPathType | null
   } | null
   activeMode: SelectModeType
 }
@@ -56,15 +58,45 @@ const treeSlice = createSlice({
       state.activeNodes = payload.path
     },
 
-    setActivePaths(state, { payload }: PayloadAction<NodeIdsType>) {
+    setActivePaths(state, { payload }: PayloadAction<SelectPathType>) {
       state.activeMode = "path"
       state.activeLeaf = null
 
-      if (state.activePaths?.a) {
-        const oldState = state.activePaths.a
-        state.activeNodes = getPathBetweenNodes(oldState, payload)
+      if (state.activePaths?.a && !state.activePaths?.b) {
+        const oldStateA = state.activePaths.a
+
+        if (oldStateA.select === payload.select) {
+          state.activePaths.a = null
+          state.activeNodes = []
+          return
+        }
+
+        state.activeNodes = getPathBetweenNodes(oldStateA.path, payload.path)
         state.activePaths.a = payload
-        state.activePaths.b = oldState
+        state.activePaths.b = oldStateA
+        return
+      }
+
+      if (state.activePaths?.a && state.activePaths?.b) {
+        const oldStateA = state.activePaths.a
+        const oldStateB = state.activePaths.b
+
+        if (oldStateA.select === payload.select) {
+          state.activeNodes = state.activePaths.b.path
+          state.activePaths.a = state.activePaths.b
+          state.activePaths.b = null
+          return
+        }
+
+        if (oldStateB.select === payload.select) {
+          state.activePaths.b = null
+          state.activeNodes = state.activePaths.a.path
+          return
+        }
+
+        state.activeNodes = getPathBetweenNodes(oldStateA.path, payload.path)
+        state.activePaths.a = payload
+        state.activePaths.b = oldStateA
         return
       }
 
@@ -72,7 +104,7 @@ const treeSlice = createSlice({
         a: payload,
         b: null,
       }
-      state.activeNodes = payload
+      state.activeNodes = payload.path
     },
   },
 })

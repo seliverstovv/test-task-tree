@@ -7,21 +7,19 @@ const getPathBetweenNodes = (pathA: NodeIdsType, pathB: NodeIdsType) => {
 
   if (lastIndexA < 0 || lastIndexB < 0) return []
 
-  let cursorA = 0
-  let cursorB = 0
+  let cursor = 0
 
-  while (cursorA < lastIndexA || cursorB < lastIndexB) {
-    if (pathA[cursorA] !== pathB[cursorB]) {
+  while (cursor < lastIndexA || cursor < lastIndexB) {
+    if (pathA[cursor] !== pathB[cursor]) {
       break
     }
 
-    rootElement = pathA[cursorA]
+    rootElement = pathA[cursor]
 
-    cursorA += 1
-    cursorB += 1
+    cursor += 1
   }
 
-  const result = [rootElement, ...pathA.slice(cursorA), ...pathB.slice(cursorB)]
+  const result = [rootElement, ...pathA.slice(cursor), ...pathB.slice(cursor)]
 
   return result
 }

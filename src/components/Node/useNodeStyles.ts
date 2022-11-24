@@ -8,13 +8,13 @@ import { PreparedNodeType } from "types/TreeTypes"
 
 const useNodeStyles = (
   node: PreparedNodeType,
-  activePathElements: ActivePathType,
+  activePathLeaf: ActivePathType,
   activeLeaf: ActiveLeafType,
   activeNodes: ActiveNodesType,
   selectMode: ActiveModeType
 ) => {
   switch (true) {
-    case activePathElements?.includes(node.id):
+    case activePathLeaf?.includes(node.id):
       return {
         color: "pink",
         strokeWith: 2,

@@ -5,8 +5,8 @@ import { setActiveLeaf, setActiveNodes, setActivePaths } from "features/TreeSlic
 import {
   activeNodesSelector,
   activeLeafSelector,
-  activePathSelector,
   activeModeSelector,
+  activePathLeafSelector,
 } from "features/selectors"
 import RenderLine from "components/Node/RenderLine"
 import styles from "styles/node.module.css"
@@ -22,11 +22,11 @@ const Node = ({ node, rootSvg, path }: NodeProps) => {
   const activeNodes = useAppSelector(activeNodesSelector)
   const activeLeaf = useAppSelector(activeLeafSelector)
   const selectMode = useAppSelector(activeModeSelector)
-  const activePathElements = useAppSelector(activePathSelector)
+  const activePathLeaf = useAppSelector(activePathLeafSelector)
 
   const { color, strokeWith } = useNodeStyles(
     node,
-    activePathElements,
+    activePathLeaf,
     activeLeaf,
     activeNodes,
     selectMode
@@ -38,7 +38,7 @@ const Node = ({ node, rootSvg, path }: NodeProps) => {
       <g
         onClick={(e) => {
           if (e.shiftKey) {
-            dispatch(setActivePaths(path))
+            dispatch(setActivePaths({ select: node.id, path }))
             return
           }
 

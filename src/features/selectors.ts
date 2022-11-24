@@ -1,25 +1,21 @@
+import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "store"
 
 export const activeNodesSelector = ({ treeReducer }: RootState) => treeReducer.activeNodes
 export const activeLeafSelector = ({ treeReducer }: RootState) => treeReducer.activeLeaf
 export const activeModeSelector = ({ treeReducer }: RootState) => treeReducer.activeMode
+export const activePathSelector = ({ treeReducer }: RootState) => treeReducer.activePaths
 
-export const activePathSelector = ({ treeReducer: { activePaths } }: RootState) => {
-  const firstArray = activePaths?.a || []
-  const secondArray = activePaths?.b || []
+export const activePathLeafSelector = createSelector([activePathSelector], (activePaths) => {
+  const leafA = activePaths?.a?.select || null
+  const leafB = activePaths?.b?.select || null
 
-  const firstArrayLastIndex = firstArray.length - 1
-  const secondArrayLastIndex = secondArray.length - 1
+  const result = [leafA, leafB]
 
-  const result = [
-    firstArray[firstArrayLastIndex] || null,
-    secondArray[secondArrayLastIndex] || null,
-  ].filter((item) => item !== null)
-
-  return result.length ? result : null
-}
+  return result
+})
 
 export type ActiveNodesType = ReturnType<typeof activeNodesSelector>
 export type ActiveLeafType = ReturnType<typeof activeLeafSelector>
 export type ActiveModeType = ReturnType<typeof activeModeSelector>
-export type ActivePathType = ReturnType<typeof activePathSelector>
+export type ActivePathType = ReturnType<typeof activePathLeafSelector>
